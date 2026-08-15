@@ -1,12 +1,20 @@
 "use client";
 
-import { Plus, X } from "lucide-react";
+import { MoreHorizontal, Pencil, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  MOCK_PROJECTS,
+  MOCK_SHARED_PROJECTS,
+  Project,
+} from "@/lib/mock-projects";
+import { ProjectDialogsState } from "@/hooks/use-project-dialogs";
+import { useState } from "react";
 
 interface ProjectSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  dialogs: ProjectDialogsState;
 }
 
 function EmptyPlaceholder({ label }: { label: string }) {
@@ -17,12 +25,82 @@ function EmptyPlaceholder({ label }: { label: string }) {
   );
 }
 
-export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
+interface ProjectItemProps {
+  project: Project;
+  onRename: (project: Project) => void;
+  onDelete: (project: Project) => void;
+}
+
+function ProjectItem({ project, onRename, onDelete }: ProjectItemProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <div className="group relative flex items-center gap-2 rounded-xl px-2 py-2 text-sm hover:bg-bg-elevated">
+      <div className="min-w-0 flex-1 cursor-pointer">
+        <p className="truncate font-medium text-text-primary">{project.name}</p>
+        <p className="truncate text-xs text-text-muted">/{project.slug}</p>
+      </div>
+
+      {project.owned && (
+        <div className="relative">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuOpen((prev) => !prev);
+            }}
+            aria-label="Project actions"
+            className="flex h-6 w-6 items-center justify-center rounded-lg text-text-faint opacity-0 transition-opacity hover:bg-bg-subtle hover:text-text-muted group-hover:opacity-100"
+          >
+            <MoreHorizontal className="h-4 w-4" />
+          </button>
+
+          {menuOpen && (
+            <>
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setMenuOpen(false)}
+                aria-hidden="true"
+              />
+              <div className="absolute right-0 top-7 z-20 min-w-36 overflow-hidden rounded-xl border border-border-default bg-bg-elevated py-1 shadow-lg">
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onRename(project);
+                  }}
+                  className="flex w-full items-center gap-2 px-3 py-1.5 text-sm text-text-secondary hover:bg-bg-subtle hover:text-text-primary"
+                >
+                  <Pencil className="h-4 w-4" />
+                  Rename
+                </button>
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onDelete(project);
+                  }}
+                  className="flex w-full items-center gap-2 px-3 py-1.5 text-sm text-state-error hover:bg-bg-subtle"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function ProjectSidebar({
+  isOpen,
+  onClose,
+  dialogs,
+}: ProjectSidebarProps) {
   return (
     <>
       {isOpen && (
         <div
-          className="fixed inset-0 z-40"
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm sm:bg-transparent sm:backdrop-blur-none"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -55,18 +133,47 @@ export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="my-projects" className="flex-1 mt-3">
-              <EmptyPlaceholder label="projects" />
+            <TabsContent value="my-projects" className="mt-3 flex-1 overflow-y-auto">
+              {MOCK_PROJECTS.length === 0 ? (
+                <EmptyPlaceholder label="projects" />
+              ) : (
+                <div className="flex flex-col gap-0.5">
+                  {MOCK_PROJECTS.map((project) => (
+                    <ProjectItem
+                      key={project.id}
+                      project={project}
+                      onRename={dialogs.openRenameDialog}
+                      onDelete={dialogs.openDeleteDialog}
+                    />
+                  ))}
+                </div>
+              )}
             </TabsContent>
 
-            <TabsContent value="shared" className="flex-1 mt-3">
-              <EmptyPlaceholder label="shared projects" />
+            <TabsContent value="shared" className="mt-3 flex-1 overflow-y-auto">
+              {MOCK_SHARED_PROJECTS.length === 0 ? (
+                <EmptyPlaceholder label="shared projects" />
+              ) : (
+                <div className="flex flex-col gap-0.5">
+                  {MOCK_SHARED_PROJECTS.map((project) => (
+                    <ProjectItem
+                      key={project.id}
+                      project={project}
+                      onRename={dialogs.openRenameDialog}
+                      onDelete={dialogs.openDeleteDialog}
+                    />
+                  ))}
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </div>
 
         <div className="border-t border-border-default p-3">
-          <Button className="w-full gap-2">
+          <Button
+            className="w-full gap-2"
+            onClick={dialogs.openCreateDialog}
+          >
             <Plus className="h-4 w-4" />
             New Project
           </Button>
