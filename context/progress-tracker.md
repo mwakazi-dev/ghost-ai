@@ -4,15 +4,16 @@ Update this file after every meaningful implementation change.
 
 ## Current Phase
 
-- Feature 01 (Design System) — complete
+- Feature 02 (Editor Chrome) — complete
 
 ## Current Goal
 
-- Feature 02: Editor Chrome
+- Feature 03 (TBD)
 
 ## Completed
 
 - Feature 01: Design System — shadcn/ui 4.18.0 installed and configured for Tailwind v4, dark-only theme tokens in globals.css (all shadcn semantic aliases wired to custom CSS vars, no .dark class switching), Button/Card/Dialog/Input/Tabs/Textarea/ScrollArea components added to components/ui/, lucide-react installed, lib/utils.ts cn() helper in place. TypeScript compiles clean.
+- Feature 02: Editor Chrome — `components/editor/editor-navbar.tsx` (fixed-height top bar, PanelLeftOpen/PanelLeftClose sidebar toggle, dark bg + bottom border), `components/editor/project-sidebar.tsx` (floating overlay, no layout push, slides in from left, isOpen/onClose props, Projects header + close button, My Projects / Shared tabs with empty placeholder states, full-width New Project button), dialog pattern ready for future use via existing shadcn Dialog, page.tsx wired with useState to drive sidebar open/close. TypeScript compiles clean, zero lint errors.
 
 ## In Progress
 
@@ -20,7 +21,7 @@ Update this file after every meaningful implementation change.
 
 ## Next Up
 
-- Feature 02: Editor Chrome
+- Feature 03 (TBD)
 
 ## Open Questions
 
