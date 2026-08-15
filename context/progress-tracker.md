@@ -1,0 +1,40 @@
+# Progress Tracker
+
+Update this file after every meaningful implementation change.
+
+## Current Phase
+
+- Feature 01 (Design System) — complete
+
+## Current Goal
+
+- Feature 02: Editor Chrome
+
+## Completed
+
+- Feature 01: Design System — shadcn/ui 4.18.0 installed and configured for Tailwind v4, dark-only theme tokens in globals.css (all shadcn semantic aliases wired to custom CSS vars, no .dark class switching), Button/Card/Dialog/Input/Tabs/Textarea/ScrollArea components added to components/ui/, lucide-react installed, lib/utils.ts cn() helper in place. TypeScript compiles clean.
+
+## In Progress
+
+- None.
+
+## Next Up
+
+- Feature 02: Editor Chrome
+
+## Open Questions
+
+- None yet.
+
+## Architecture Decisions
+
+- shadcn/ui over Tailwind v4 (CSS-based token config via @theme inline in globals.css, no tailwind.config.js).
+- Dark-only theme: all shadcn :root variables removed; semantic aliases in @theme inline point directly to custom dark tokens. No .dark class switching.
+- Do not modify generated components/ui/* files after shadcn installation.
+
+## Session Notes
+
+- Using Next.js 16.3.1 with React 19 and Tailwind CSS v4.
+- shadcn 4.18.0 used; it auto-detected Tailwind v4.
+- lucide-react was already present as a transitive dependency after shadcn install.
+- @theme inline maps --color-background, --color-foreground, etc. to custom --bg-* / --text-* / --accent-* tokens defined in :root. shadcn components consume these via bg-background, text-foreground Tailwind classes — no direct CSS var references needed.
