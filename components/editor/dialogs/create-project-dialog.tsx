@@ -1,7 +1,6 @@
 "use client";
 
 import { useId } from "react";
-import { toSlug } from "@/lib/mock-projects";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +15,7 @@ import { Button } from "@/components/ui/button";
 interface CreateProjectDialogProps {
   open: boolean;
   projectName: string;
+  roomIdPreview: string;
   isLoading: boolean;
   onProjectNameChange: (name: string) => void;
   onConfirm: () => void;
@@ -25,13 +25,13 @@ interface CreateProjectDialogProps {
 export function CreateProjectDialog({
   open,
   projectName,
+  roomIdPreview,
   isLoading,
   onProjectNameChange,
   onConfirm,
   onClose,
 }: CreateProjectDialogProps) {
   const nameId = useId();
-  const slug = toSlug(projectName);
 
   return (
     <Dialog
@@ -50,7 +50,10 @@ export function CreateProjectDialog({
 
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor={nameId} className="text-xs font-medium text-text-secondary">
+            <label
+              htmlFor={nameId}
+              className="text-xs font-medium text-text-secondary"
+            >
               Project name
             </label>
             <Input
@@ -65,10 +68,12 @@ export function CreateProjectDialog({
             />
           </div>
 
-          {slug && (
+          {roomIdPreview && (
             <p className="text-xs text-text-muted">
-              Slug:{" "}
-              <span className="font-mono text-text-secondary">{slug}</span>
+              Room ID:{" "}
+              <span className="font-mono text-text-secondary">
+                {roomIdPreview}
+              </span>
             </p>
           )}
         </div>

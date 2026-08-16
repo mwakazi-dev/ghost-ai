@@ -4,11 +4,11 @@ Update this file after every meaningful implementation change.
 
 ## Current Phase
 
-- Feature 05 (Prisma Models + Client) — complete
+- Feature 07 (Wire Editor Home) — complete
 
 ## Current Goal
 
-- Feature 06 (TBD)
+- Feature 08 (TBD)
 
 ## Completed
 
@@ -17,6 +17,8 @@ Update this file after every meaningful implementation change.
 - Feature 04: Project Dialogs — `lib/mock-projects.ts` (Project type, mock owned + shared projects, `toSlug` helper), `hooks/use-project-dialogs.ts` (dialog/form/loading state), `components/editor/dialogs/` (CreateProjectDialog with live slug preview, RenameProjectDialog with autofocus + Enter submit, DeleteProjectDialog with destructive confirm), `components/editor/project-sidebar.tsx` updated with project items, owned-only rename/delete action menus, mobile backdrop scrim, sidebar New Project wired. `app/editor/page.tsx` updated with home heading + New Project button + all three dialogs wired. TypeScript clean, zero lint errors.
 - Feature 03: Auth — `@clerk/ui` installed. `proxy.ts` at project root with protected-first Clerk middleware (public: `/`, `/sign-in(.*)`, `/sign-up(.*)`). `ClerkProvider` wraps root layout with `dark` theme from `@clerk/ui/themes` and appearance variable overrides pointing to app CSS vars (no hardcoded colors). Two-panel sign-in/sign-up pages (`app/sign-in/[[...sign-in]]/page.tsx`, `app/sign-up/[[...sign-up]]/page.tsx`) — left panel with compact logo, tagline, and text-only feature list on large screens; form only on small screens. `app/editor/page.tsx` created with editor chrome (navbar + project sidebar). `app/page.tsx` redirects authenticated users to `/editor`, unauthenticated to `/sign-in`. `UserButton` added to editor navbar right section. Clerk env vars for sign-in/sign-up URLs and fallback redirects added to `.env.local`.
 - Feature 05: Prisma Models + Client — `prisma/models/project.prisma` with `Project` (ownerId, name, description?, status enum DRAFT/ARCHIVED, canvasJsonPath?, timestamps, indexes on ownerId and createdAt) and `ProjectCollaborator` (projectId cascade-delete relation, email, createdAt, unique on project/email, indexes on email and project/date). `lib/prisma.ts` cached singleton branching on `DATABASE_URL`: `prisma+postgres://` → Accelerate via `accelerateUrl`, otherwise → `@prisma/adapter-pg`. Migration `20260816104041_init_projects` applied to Prisma Postgres. Client generated to `app/generated/prisma/`. TypeScript compiles clean, `npm run build` passes.
+- Feature 06: Project APIs — `app/api/projects/route.ts` (GET lists owner's projects ordered by createdAt desc; POST creates with name defaulting to "Untitled Project", returns 201). `app/api/projects/[projectId]/route.ts` (PATCH renames with owner check; DELETE removes with owner check). All handlers return 401 for unauthenticated requests, 403 for non-owner mutations. `@prisma/client@7.9.1` installed (was missing, needed for Prisma runtime imports). `npm run build` passes.
+- Feature 07: Wire Editor Home — `lib/project-data.ts` (Project UI type, `getProjectsForUser` fetches owned + shared via Clerk `currentUser` for email lookup). `app/api/projects/route.ts` POST updated to accept optional custom `id` for room ID alignment. `hooks/use-project-actions.ts` (slugify + random suffix for room ID preview, create POSTs to API and navigates to new workspace, rename PATCHes and refreshes, delete DELETEs and redirects to /editor if active workspace else refreshes). `app/editor/page.tsx` converted to server component (fetches projects via `getProjectsForUser`, renders `EditorHomeClient`). `components/editor/editor-home-client.tsx` (new client shell with sidebar state and all three dialogs wired). `components/editor/project-sidebar.tsx` updated to accept `ownedProjects`/`sharedProjects` props and `ProjectActionsState`. Create/Rename/Delete dialogs updated to import `Project` from `lib/project-data`. Create dialog now shows Room ID preview. `npm run build` passes.
 
 ## In Progress
 
@@ -24,7 +26,7 @@ Update this file after every meaningful implementation change.
 
 ## Next Up
 
-- Feature 06 (TBD)
+- Feature 08 (TBD)
 
 ## Open Questions
 

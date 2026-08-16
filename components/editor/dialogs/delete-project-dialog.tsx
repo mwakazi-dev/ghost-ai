@@ -1,6 +1,6 @@
 "use client";
 
-import { Project } from "@/lib/mock-projects";
+import { Project } from "@/lib/project-data";
 import {
   Dialog,
   DialogContent,
