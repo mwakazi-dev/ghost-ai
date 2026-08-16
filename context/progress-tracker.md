@@ -4,11 +4,11 @@ Update this file after every meaningful implementation change.
 
 ## Current Phase
 
-- Feature 04 (Project Dialogs) — complete
+- Feature 05 (Prisma Models + Client) — complete
 
 ## Current Goal
 
-- Feature 05 (TBD)
+- Feature 06 (TBD)
 
 ## Completed
 
@@ -16,6 +16,7 @@ Update this file after every meaningful implementation change.
 - Feature 02: Editor Chrome — `components/editor/editor-navbar.tsx` (fixed-height top bar, PanelLeftOpen/PanelLeftClose sidebar toggle, dark bg + bottom border), `components/editor/project-sidebar.tsx` (floating overlay, no layout push, slides in from left, isOpen/onClose props, Projects header + close button, My Projects / Shared tabs with empty placeholder states, full-width New Project button), dialog pattern ready for future use via existing shadcn Dialog, page.tsx wired with useState to drive sidebar open/close. TypeScript compiles clean, zero lint errors.
 - Feature 04: Project Dialogs — `lib/mock-projects.ts` (Project type, mock owned + shared projects, `toSlug` helper), `hooks/use-project-dialogs.ts` (dialog/form/loading state), `components/editor/dialogs/` (CreateProjectDialog with live slug preview, RenameProjectDialog with autofocus + Enter submit, DeleteProjectDialog with destructive confirm), `components/editor/project-sidebar.tsx` updated with project items, owned-only rename/delete action menus, mobile backdrop scrim, sidebar New Project wired. `app/editor/page.tsx` updated with home heading + New Project button + all three dialogs wired. TypeScript clean, zero lint errors.
 - Feature 03: Auth — `@clerk/ui` installed. `proxy.ts` at project root with protected-first Clerk middleware (public: `/`, `/sign-in(.*)`, `/sign-up(.*)`). `ClerkProvider` wraps root layout with `dark` theme from `@clerk/ui/themes` and appearance variable overrides pointing to app CSS vars (no hardcoded colors). Two-panel sign-in/sign-up pages (`app/sign-in/[[...sign-in]]/page.tsx`, `app/sign-up/[[...sign-up]]/page.tsx`) — left panel with compact logo, tagline, and text-only feature list on large screens; form only on small screens. `app/editor/page.tsx` created with editor chrome (navbar + project sidebar). `app/page.tsx` redirects authenticated users to `/editor`, unauthenticated to `/sign-in`. `UserButton` added to editor navbar right section. Clerk env vars for sign-in/sign-up URLs and fallback redirects added to `.env.local`.
+- Feature 05: Prisma Models + Client — `prisma/models/project.prisma` with `Project` (ownerId, name, description?, status enum DRAFT/ARCHIVED, canvasJsonPath?, timestamps, indexes on ownerId and createdAt) and `ProjectCollaborator` (projectId cascade-delete relation, email, createdAt, unique on project/email, indexes on email and project/date). `lib/prisma.ts` cached singleton branching on `DATABASE_URL`: `prisma+postgres://` → Accelerate via `accelerateUrl`, otherwise → `@prisma/adapter-pg`. Migration `20260816104041_init_projects` applied to Prisma Postgres. Client generated to `app/generated/prisma/`. TypeScript compiles clean, `npm run build` passes.
 
 ## In Progress
 
@@ -23,7 +24,7 @@ Update this file after every meaningful implementation change.
 
 ## Next Up
 
-- Feature 05 (TBD)
+- Feature 06 (TBD)
 
 ## Open Questions
 
