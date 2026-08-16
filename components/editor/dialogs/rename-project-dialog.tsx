@@ -1,7 +1,7 @@
 "use client";
 
 import { useId } from "react";
-import { Project } from "@/lib/mock-projects";
+import { Project } from "@/lib/project-data";
 import {
   Dialog,
   DialogContent,

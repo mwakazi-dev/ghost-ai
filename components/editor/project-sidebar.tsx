@@ -3,18 +3,16 @@
 import { MoreHorizontal, Pencil, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  MOCK_PROJECTS,
-  MOCK_SHARED_PROJECTS,
-  Project,
-} from "@/lib/mock-projects";
-import { ProjectDialogsState } from "@/hooks/use-project-dialogs";
+import { Project } from "@/lib/project-data";
+import { ProjectActionsState } from "@/hooks/use-project-actions";
 import { useState } from "react";
 
 interface ProjectSidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  dialogs: ProjectDialogsState;
+  ownedProjects: Project[];
+  sharedProjects: Project[];
+  actions: ProjectActionsState;
 }
 
 function EmptyPlaceholder({ label }: { label: string }) {
@@ -94,7 +92,9 @@ function ProjectItem({ project, onRename, onDelete }: ProjectItemProps) {
 export function ProjectSidebar({
   isOpen,
   onClose,
-  dialogs,
+  ownedProjects,
+  sharedProjects,
+  actions,
 }: ProjectSidebarProps) {
   return (
     <>
@@ -133,34 +133,40 @@ export function ProjectSidebar({
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="my-projects" className="mt-3 flex-1 overflow-y-auto">
-              {MOCK_PROJECTS.length === 0 ? (
+            <TabsContent
+              value="my-projects"
+              className="mt-3 flex-1 overflow-y-auto"
+            >
+              {ownedProjects.length === 0 ? (
                 <EmptyPlaceholder label="projects" />
               ) : (
                 <div className="flex flex-col gap-0.5">
-                  {MOCK_PROJECTS.map((project) => (
+                  {ownedProjects.map((project) => (
                     <ProjectItem
                       key={project.id}
                       project={project}
-                      onRename={dialogs.openRenameDialog}
-                      onDelete={dialogs.openDeleteDialog}
+                      onRename={actions.openRenameDialog}
+                      onDelete={actions.openDeleteDialog}
                     />
                   ))}
                 </div>
               )}
             </TabsContent>
 
-            <TabsContent value="shared" className="mt-3 flex-1 overflow-y-auto">
-              {MOCK_SHARED_PROJECTS.length === 0 ? (
+            <TabsContent
+              value="shared"
+              className="mt-3 flex-1 overflow-y-auto"
+            >
+              {sharedProjects.length === 0 ? (
                 <EmptyPlaceholder label="shared projects" />
               ) : (
                 <div className="flex flex-col gap-0.5">
-                  {MOCK_SHARED_PROJECTS.map((project) => (
+                  {sharedProjects.map((project) => (
                     <ProjectItem
                       key={project.id}
                       project={project}
-                      onRename={dialogs.openRenameDialog}
-                      onDelete={dialogs.openDeleteDialog}
+                      onRename={actions.openRenameDialog}
+                      onDelete={actions.openDeleteDialog}
                     />
                   ))}
                 </div>
@@ -172,7 +178,7 @@ export function ProjectSidebar({
         <div className="border-t border-border-default p-3">
           <Button
             className="w-full gap-2"
-            onClick={dialogs.openCreateDialog}
+            onClick={actions.openCreateDialog}
           >
             <Plus className="h-4 w-4" />
             New Project
